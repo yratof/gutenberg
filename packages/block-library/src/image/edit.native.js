@@ -14,13 +14,30 @@ import {
 } from 'react-native-gutenberg-bridge';
 
 /**
+ * WordPress dependencies
+ */
+import { 
+	Toolbar, 
+	ToolbarButton, 
+	Spinner, 
+	Dashicon 
+} from '@wordpress/components';
+import { withSelect } from '@wordpress/data';
+import { 
+	MediaPlaceholder, 
+	RichText, 
+	BlockControls, 
+	InspectorControls, 
+	BottomSheet 
+} from '@wordpress/editor';
+import { __ } from '@wordpress/i18n';
+import { isURL } from '@wordpress/url';
+import { compose } from '@wordpress/compose';
+
+/**
  * Internal dependencies
  */
-import { MediaPlaceholder, RichText, BlockControls, InspectorControls, BottomSheet } from '@wordpress/editor';
-import { Toolbar, ToolbarButton, Spinner, Dashicon } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
 import ImageSize from './image-size';
-import { isURL } from '@wordpress/url';
 import styles from './styles.scss';
 
 const MEDIA_UPLOAD_STATE_UPLOADING = 1;
@@ -28,7 +45,7 @@ const MEDIA_UPLOAD_STATE_SUCCEEDED = 2;
 const MEDIA_UPLOAD_STATE_FAILED = 3;
 const MEDIA_UPLOAD_STATE_RESET = 4;
 
-export default class ImageEdit extends React.Component {
+class ImageEdit extends React.Component {
 	constructor( props ) {
 		super( props );
 
@@ -284,3 +301,19 @@ export default class ImageEdit extends React.Component {
 		);
 	}
 }
+
+export default compose( [
+	withSelect( ( select, props ) => {
+		const { getMedia } = select( 'core' );
+		const { getEditorSettings } = select( 'core/editor' );
+		const { id } = props.attributes;
+		const { maxWidth, isRTL, imageSizes } = getEditorSettings();
+		const image = id ? getMedia( id ) : null;
+		return {
+			image: undefined,
+			maxWidth,
+			isRTL,
+			imageSizes,
+		};
+	} ),
+] )( ImageEdit );
