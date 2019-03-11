@@ -763,6 +763,19 @@ via its `onChange` callback, in addition to `onInput`.
 
 Whether the most recent block change was persistent.
 
+### __experimentalGetParsedReusableBlock
+
+Returns the parsed block saved as shared block with the given ID.
+
+*Parameters*
+
+ * state: Global application state.
+ * ref: The shared block's ID.
+
+*Returns*
+
+The parsed block.
+
 ## Actions
 
 ### resetBlocks

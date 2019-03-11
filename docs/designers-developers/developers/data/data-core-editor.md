@@ -918,15 +918,15 @@ Returns an action object used to delete a reusable block via the REST API.
 
  * id: The ID of the reusable block to delete.
 
-### __experimentalUpdateReusableBlockTitle
+### __experimentalUpdateReusableBlock
 
-Returns an action object used in signalling that a reusable block's title is
+Returns an action object used in signalling that a reusable block is
 to be updated.
 
 *Parameters*
 
  * id: The ID of the reusable block to update.
- * title: The new title.
+ * changes: The changes to apply.
 
 ### __experimentalConvertBlockToStatic
 

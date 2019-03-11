@@ -11,7 +11,6 @@ import {
 	isEqual,
 	last,
 	keyBy,
-	map,
 } from 'lodash';
 
 /**
@@ -615,14 +614,7 @@ export const reusableBlocks = combineReducers( {
 			case 'RECEIVE_REUSABLE_BLOCKS': {
 				return {
 					...state,
-					...map(
-						keyBy( action.results, 'id' ),
-						( block ) => ( {
-							...block,
-							content: block.content.raw,
-							title: block.title.raw,
-						} )
-					),
+					...keyBy( action.results, 'id' ),
 				};
 			}
 
