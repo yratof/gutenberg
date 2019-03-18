@@ -21,6 +21,7 @@ export const settings = {
 	category: 'widgets',
 
 	supports: {
+		customClassName: false,
 		html: false,
 	},
 
