@@ -1035,12 +1035,12 @@ export class RichText extends Component {
 			wrapperClassName,
 			className,
 			inlineToolbar = false,
-			formattingControls,
 			placeholder,
 			keepPlaceholderOnFocus = false,
 			isSelected,
 			autocompleters,
 			onTagNameChange,
+			disallowFormats,
 		} = this.props;
 
 		// Generating a key that includes `tagName` ensures that if the tag
@@ -1063,14 +1063,14 @@ export class RichText extends Component {
 						onChange={ this.onChange }
 					/>
 				) }
-				{ isSelected && ! inlineToolbar && (
+				{ isSelected && ! inlineToolbar && disallowFormats !== true && (
 					<BlockFormatControls>
-						<FormatToolbar controls={ formattingControls } />
+						<FormatToolbar />
 					</BlockFormatControls>
 				) }
-				{ isSelected && inlineToolbar && (
+				{ isSelected && inlineToolbar && disallowFormats !== true && (
 					<IsolatedEventContainer className="editor-rich-text__inline-toolbar block-editor-rich-text__inline-toolbar">
-						<FormatToolbar controls={ formattingControls } />
+						<FormatToolbar />
 					</IsolatedEventContainer>
 				) }
 				<Autocomplete
@@ -1112,7 +1112,7 @@ export class RichText extends Component {
 									{ MultilineTag ? <MultilineTag>{ placeholder }</MultilineTag> : placeholder }
 								</Tagname>
 							}
-							{ isSelected && <FormatEdit value={ record } onChange={ this.onChange } /> }
+							{ isSelected && <FormatEdit value={ record } onChange={ this.onChange } disallowFormats={ disallowFormats } /> }
 						</Fragment>
 					) }
 				</Autocomplete>
@@ -1123,7 +1123,6 @@ export class RichText extends Component {
 }
 
 RichText.defaultProps = {
-	formattingControls: [ 'bold', 'italic', 'link', 'strikethrough' ],
 	format: 'string',
 	value: '',
 };
