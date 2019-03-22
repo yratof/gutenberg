@@ -1,7 +1,10 @@
 /**
  * External dependencies
  */
-import { map } from 'lodash';
+import {
+	map,
+	pickBy,
+} from 'lodash';
 
 /**
  * WordPress dependencies
@@ -33,6 +36,7 @@ class LegacyWidgetEdit extends Component {
 	constructor() {
 		super( ...arguments );
 		this.state = {
+			hasEditForm: true,
 			isPreview: false,
 		};
 		this.switchToEdit = this.switchToEdit.bind( this );
@@ -47,28 +51,35 @@ class LegacyWidgetEdit extends Component {
 			hasPermissionsToManageWidgets,
 			setAttributes,
 		} = this.props;
-		const { isPreview } = this.state;
-		const { identifier, isCallbackWidget } = attributes;
+		const visibleLegacyWidgets = pickBy(
+			availableLegacyWidgets,
+			( { isHidden } ) => ! isHidden
+		);
+		const { isPreview, hasEditForm } = this.state;
+		const { identifier, widgetClass } = attributes;
 		const widgetObject = identifier && availableLegacyWidgets[ identifier ];
-		if ( ! widgetObject ) {
+		if ( ! identifier && ! widgetClass ) {
 			let placeholderContent;
 
 			if ( ! hasPermissionsToManageWidgets ) {
 				placeholderContent = __( 'You don\'t have permissions to use widgets on this site.' );
-			} else if ( availableLegacyWidgets.length === 0 ) {
+			} else if ( visibleLegacyWidgets.length === 0 ) {
 				placeholderContent = __( 'There are no widgets available.' );
 			} else {
 				placeholderContent = (
 					<SelectControl
 						label={ __( 'Select a legacy widget to display:' ) }
 						value={ identifier || 'none' }
-						onChange={ ( value ) => setAttributes( {
-							instance: {},
-							identifier: value,
-							isCallbackWidget: availableLegacyWidgets[ value ].isCallbackWidget,
-						} ) }
+						onChange={ ( value ) => {
+							const { isCallbackWidget } = visibleLegacyWidgets[ value ];
+							setAttributes( {
+								instance: {},
+								identifier: isCallbackWidget ? value : undefined,
+								widgetClass: isCallbackWidget ? undefined : value,
+							} );
+						} }
 						options={ [ { value: 'none', label: 'Select widget' } ].concat(
-							map( availableLegacyWidgets, ( widget, key ) => {
+							map( visibleLegacyWidgets, ( widget, key ) => {
 								return {
 									value: key,
 									label: widget.name,
@@ -89,13 +100,13 @@ class LegacyWidgetEdit extends Component {
 			);
 		}
 
-		const inspectorControls = (
+		const inspectorControls = widgetObject ? (
 			<InspectorControls>
 				<PanelBody title={ widgetObject.name }>
 					{ widgetObject.description }
 				</PanelBody>
 			</InspectorControls>
-		);
+		) : null;
 		if ( ! hasPermissionsToManageWidgets ) {
 			return (
 				<>
@@ -115,7 +126,7 @@ class LegacyWidgetEdit extends Component {
 							icon="update"
 						>
 						</IconButton>
-						{ ! isCallbackWidget && (
+						{ hasEditForm && (
 							<>
 								<Button
 									className={ `components-tab-button ${ ! isPreview ? 'is-active' : '' }` }
@@ -134,21 +145,29 @@ class LegacyWidgetEdit extends Component {
 					</Toolbar>
 				</BlockControls>
 				{ inspectorControls }
-				{ ! isCallbackWidget && (
+				{ hasEditForm && (
 					<LegacyWidgetEditHandler
 						isVisible={ ! isPreview }
 						identifier={ attributes.identifier }
+						widgetClass={ attributes.widgetClass }
 						instance={ attributes.instance }
 						onInstanceChange={
-							( newInstance ) => {
-								this.props.setAttributes( {
-									instance: newInstance,
-								} );
+							( newInstance, newHasEditForm ) => {
+								if ( newInstance ) {
+									this.props.setAttributes( {
+										instance: newInstance,
+									} );
+								}
+								if ( newHasEditForm !== this.hasEditForm ) {
+									this.setState( {
+										hasEditForm: newHasEditForm,
+									} );
+								}
 							}
 						}
 					/>
 				) }
-				{ ( isPreview || isCallbackWidget ) && this.renderWidgetPreview() }
+				{ ( isPreview || ! hasEditForm ) && this.renderWidgetPreview() }
 			</>
 		);
 	}
@@ -158,6 +177,10 @@ class LegacyWidgetEdit extends Component {
 		this.props.setAttributes( {
 			instance: {},
 			identifier: undefined,
+			widgetClass: undefined,
+		} );
+		this.setState( {
+			hasEditForm: true,
 		} );
 	}
 

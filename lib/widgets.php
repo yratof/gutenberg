@@ -58,6 +58,9 @@ add_action( 'admin_print_footer_scripts', 'gutenberg_block_editor_admin_print_fo
  */
 function gutenberg_block_editor_admin_footer() {
 	if ( gutenberg_is_block_editor() ) {
+		echo '<form method="post">';
+		echo wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false );
+		echo '</form>';
 		/** This action is documented in wp-admin/admin-footer.php */
 		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		do_action( 'admin_footer-widgets.php' );
@@ -102,18 +105,17 @@ function gutenberg_get_legacy_widget_settings() {
 	$available_legacy_widgets          = array();
 	global $wp_widget_factory, $wp_registered_widgets;
 	foreach ( $wp_widget_factory->widgets as $class => $widget_obj ) {
-		if ( ! in_array( $class, $core_widgets ) ) {
-			$available_legacy_widgets[ $class ] = array(
-				'name'             => html_entity_decode( $widget_obj->name ),
-				// wp_widget_description is not being used because its input parameter is a Widget Id.
-				// Widgets id's reference to a specific widget instance.
-				// Here we are iterating on all the available widget classes even if no widget instance exists for them.
-				'description'      => isset( $widget_obj->widget_options['description'] ) ?
-					html_entity_decode( $widget_obj->widget_options['description'] ) :
-					null,
-				'isCallbackWidget' => false,
-			);
-		}
+		$available_legacy_widgets[ $class ] = array(
+			'name'             => html_entity_decode( $widget_obj->name ),
+			// wp_widget_description is not being used because its input parameter is a Widget Id.
+			// Widgets id's reference to a specific widget instance.
+			// Here we are iterating on all the available widget classes even if no widget instance exists for them.
+			'description'      => isset( $widget_obj->widget_options['description'] ) ?
+				html_entity_decode( $widget_obj->widget_options['description'] ) :
+				null,
+			'isCallbackWidget' => false,
+			'isHidden'         => in_array( $class, $core_widgets, true ),
+		);
 	}
 	foreach ( $wp_registered_widgets as $widget_id => $widget_obj ) {
 		if (
@@ -204,3 +206,12 @@ function gutenberg_create_wp_area_post_type() {
 add_action( 'init', 'gutenberg_create_wp_area_post_type' );
 
 add_filter( 'sidebars_widgets', 'Experimental_WP_Widget_Blocks_Manager::swap_out_sidebars_blocks_for_block_widgets' );
+
+/**
+ * Function to enqueue admin-widgets as part of the block editor assets.
+ */
+function gutenberg_enqueue_widget_scripts() {
+	wp_enqueue_script( 'admin-widgets' );
+}
+
+add_action( 'enqueue_block_editor_assets', 'gutenberg_enqueue_widget_scripts' );
