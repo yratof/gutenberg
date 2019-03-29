@@ -11,11 +11,11 @@ import { Component, createPortal } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { Consumer } from './context';
+import { withConsumerContext } from './context';
 
 let occurrences = 0;
 
-class FillComponent extends Component {
+class Fill extends Component {
 	constructor() {
 		super( ...arguments );
 		this.occurrence = ++occurrences;
@@ -75,17 +75,4 @@ class FillComponent extends Component {
 	}
 }
 
-const Fill = ( props ) => (
-	<Consumer>
-		{ ( { getSlot, registerFill, unregisterFill } ) => (
-			<FillComponent
-				{ ...props }
-				getSlot={ getSlot }
-				registerFill={ registerFill }
-				unregisterFill={ unregisterFill }
-			/>
-		) }
-	</Consumer>
-);
-
-export default Fill;
+export default withConsumerContext( Fill );
