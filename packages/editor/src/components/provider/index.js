@@ -19,6 +19,7 @@ import { decodeEntities } from '@wordpress/html-entities';
 /**
  * Internal dependencies
  */
+import withRegistryProvider from './with-registry-provider';
 import transformStyles from '../../editor-styles';
 import { mediaUpload } from '../../utils';
 import ReusableBlocksButtons from '../reusable-blocks-buttons';
@@ -164,6 +165,7 @@ class EditorProvider extends Component {
 }
 
 export default compose( [
+	withRegistryProvider,
 	withSelect( ( select ) => {
 		const {
 			__unstableIsEditorReady: isEditorReady,

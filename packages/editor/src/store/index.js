@@ -13,11 +13,15 @@ import * as actions from './actions';
 import controls from './controls';
 import { STORE_KEY } from './constants';
 
-const store = registerStore( STORE_KEY, {
+export const storeConfig = {
 	reducer,
 	selectors,
 	actions,
 	controls,
+};
+
+const store = registerStore( STORE_KEY, {
+	...storeConfig,
 	persist: [ 'preferences' ],
 } );
 applyMiddlewares( store );
