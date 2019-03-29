@@ -23,6 +23,7 @@ export {
 	RichTextShortcut,
 	RichTextToolbarButton,
 	UnstableRichTextInputEvent,
+	FormatToolbar,
 } from './rich-text';
 export { default as MediaPlaceholder } from './media-placeholder';
 export { default as MediaUpload } from './media-upload';
