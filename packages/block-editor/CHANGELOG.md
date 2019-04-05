@@ -1,3 +1,9 @@
+## Master
+
+### New Features
+
+- The `URLPopover` component now passes through all unhandled props to the underlying Popover component.
+
 ## 2.0.0 (2019-04-16)
 
 ### New Features
@@ -10,7 +16,6 @@
 - Added the usage of `mediaPreview` for the `Placeholder` component to the `MediaPlaceholder` component.
 - Added a an `onDoubleClick` event handler to the `MediaPlaceholder` component.
 - Added a way to pass special `ref` property to the `PlainText` component.
-- The `URLPopover` component now passes through all unhandled props to the underlying Popover component.
 
 ### Breaking Changes
 
