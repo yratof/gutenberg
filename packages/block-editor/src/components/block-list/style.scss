@@ -65,6 +65,11 @@
 		margin-top: $block-padding * 2 + $block-spacing;
 		margin-bottom: $block-padding * 2 + $block-spacing;
 	}
+
+	// Animate extra padding that appears when nested blocks are selected.
+	.block-editor-inner-blocks {
+		transition: padding 0.1s ease-out;
+	}
 }
 
 .block-editor-block-list__layout .block-editor-block-list__block {
