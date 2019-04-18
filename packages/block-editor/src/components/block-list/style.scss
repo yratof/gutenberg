@@ -65,11 +65,6 @@
 		margin-top: $block-padding * 2 + $block-spacing;
 		margin-bottom: $block-padding * 2 + $block-spacing;
 	}
-
-	// Animate extra padding that appears when nested blocks are selected.
-	.block-editor-inner-blocks {
-		transition: padding 0.1s ease-out;
-	}
 }
 
 .block-editor-block-list__layout .block-editor-block-list__block {
@@ -188,6 +183,10 @@
 		.block-editor-inner-blocks {
 			padding: $block-padding;
 
+			// Animate the transition.
+			animation: block-editor-inner-blocks__padding-animation 0.1s ease-out;
+			animation-fill-mode: forwards;
+
 			.block-editor-block-list__layout .block-editor-block-list__block:not(.is-selected) > .block-editor-block-list__block-edit::before {
 				border: $border-width dashed $dark-opacity-light-800;
 			}
@@ -201,6 +200,14 @@
 	}
 }
 
+@keyframes block-editor-inner-blocks__padding-animation {
+	from {
+		transform: scale(1.05);
+	}
+	to {
+		transform: scale(1);
+	}
+}
 
 /**
  * Cross-block selection
