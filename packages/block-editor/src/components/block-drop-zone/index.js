@@ -15,7 +15,7 @@ import {
 	getBlockTransforms,
 	findTransform,
 } from '@wordpress/blocks';
-import { Component } from '@wordpress/element';
+import { cloneElement, Component } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 
@@ -116,17 +116,20 @@ class BlockDropZone extends Component {
 			return null;
 		}
 		const isAppender = index === undefined;
-
+		const dropZone = (
+			<DropZone
+				className={ classnames( 'editor-block-drop-zone block-editor-block-drop-zone', {
+					'is-appender': isAppender,
+				} ) }
+				onHTMLDrop={ this.onHTMLDrop }
+				onDrop={ this.onDrop }
+			/>
+		);
 		return (
-			<MediaUploadCheck>
-				<DropZone
-					className={ classnames( 'editor-block-drop-zone block-editor-block-drop-zone', {
-						'is-appender': isAppender,
-					} ) }
-					onFilesDrop={ this.onFilesDrop }
-					onHTMLDrop={ this.onHTMLDrop }
-					onDrop={ this.onDrop }
-				/>
+			<MediaUploadCheck
+				fallback={ dropZone }
+			>
+				{ cloneElement( dropZone, { onFilesDrop: this.onFilesDrop } ) }
 			</MediaUploadCheck>
 		);
 	}
