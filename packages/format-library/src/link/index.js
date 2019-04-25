@@ -71,16 +71,6 @@ export const link = {
 			return (
 				<Fragment>
 					<RichTextShortcut
-						type="access"
-						character="a"
-						onUse={ this.addLink }
-					/>
-					<RichTextShortcut
-						type="access"
-						character="s"
-						onUse={ this.onRemoveFormat }
-					/>
-					<RichTextShortcut
 						type="primary"
 						character="k"
 						onUse={ this.addLink }
