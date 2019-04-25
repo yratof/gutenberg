@@ -387,11 +387,29 @@ _Returns_
 
 <a name="RegistryConsumer" href="#RegistryConsumer">#</a> **RegistryConsumer**
 
-Undocumented declaration.
+A context consumer component which provides to the rendered child function a
+reference to the current registry context.
+
+_Related_
+
+-   <https://reactjs.org/docs/context.html#contextconsumer>
+
+_Type_
+
+-   `WPComponent` 
 
 <a name="RegistryProvider" href="#RegistryProvider">#</a> **RegistryProvider**
 
-Undocumented declaration.
+A context provider component which provides to descendent RegistryConsumer
+elements a reference to the given registry context.
+
+_Related_
+
+-   <https://reactjs.org/docs/context.html#contextprovider>
+
+_Type_
+
+-   `WPComponent` 
 
 <a name="select" href="#select">#</a> **select**
 
