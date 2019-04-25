@@ -15,8 +15,16 @@ export { default as withRegistry } from './components/with-registry';
 export { default as RegistryProvider, RegistryConsumer } from './components/registry-provider';
 export { default as __experimentalAsyncModeProvider } from './components/async-mode-provider';
 export { createRegistry } from './registry';
-export { plugins };
 export { createRegistrySelector, createRegistryControl } from './factory';
+
+/**
+ * Object of available plugins to use with a registry.
+ *
+ * @see [use](#use)
+ *
+ * @type {Object}
+ */
+export { plugins };
 
 /**
  * The combineReducers helper function turns an object whose values are different
