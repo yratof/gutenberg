@@ -35,3 +35,4 @@ export { updateFormats as __unstableUpdateFormats } from './update-formats';
 export { getActiveFormats as __unstableGetActiveFormats } from './get-active-formats';
 
 export { default as RichText } from './component';
+export { default as __unstableFormatEdit } from './component/format-edit';

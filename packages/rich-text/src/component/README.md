@@ -37,10 +37,6 @@ Render a rich [`contenteditable` input](https://developer.mozilla.org/en-US/docs
 
 *Optional.* Called when the block can be removed. `forward` is true when the selection is expected to move to the next block, false to the previous block.
 
-### `formattingControls: Array`
-
-*Optional.* By default, all formatting controls are present. This setting can be used to fine-tune formatting controls. Possible items: `[ 'bold', 'italic', 'strikethrough', 'link' ]`.
-
 ### `isSelected: Boolean`
 
 *Optional.* Whether to show the input is selected or not in order to show the formatting controls. By default it renders the controls when the block is selected.
@@ -53,117 +49,25 @@ Render a rich [`contenteditable` input](https://developer.mozilla.org/en-US/docs
 
 *Optional.* A list of autocompleters to use instead of the default.
 
-## RichText.Content
-
-`RichText.Content` should be used in the `save` function of your block to correctly save rich text content.
-
 ## Example
 
 {% codetabs %}
 {% ES5 %}
 ```js
-wp.blocks.registerBlockType( /* ... */, {
-	// ...
-
-	attributes: {
-		content: {
-			source: 'html',
-			selector: 'h2',
-		},
-	},
-
-	edit: function( props ) {
-		return wp.element.createElement( wp.editor.RichText, {
-			tagName: 'h2',
-			className: props.className,
-			value: props.attributes.content,
-			onChange: function( content ) {
-				props.setAttributes( { content: content } );
-			}
-		} );
-	},
-
-	save: function( props ) {
-		return wp.element.createElement( wp.editor.RichText.Content, {
-			tagName: 'h2', value: props.attributes.content
-		} );
-	}
+wp.element.createElement( wp.editor.RichText, {
+	tagName: 'h2',
+	value: value,
+	onChange: function( content ) {}
 } );
 ```
 {% ESNext %}
 ```js
-const { registerBlockType } = wp.blocks;
 const { RichText } = wp.editor;
 
-registerBlockType( /* ... */, {
-	// ...
-
-	attributes: {
-		content: {
-			source: 'html',
-			selector: 'h2',
-		},
-	},
-
-	edit( { className, attributes, setAttributes } ) {
-		return (
-			<RichText
-				tagName="h2"
-				className={ className }
-				value={ attributes.content }
-				onChange={ ( content ) => setAttributes( { content } ) }
-			/>
-		);
-	},
-
-	save( { attributes } ) {
-		return <RichText.Content tagName="h2" value={ attributes.content } />;
-	}
-} );
-```
-{% end %}
-
-## RichTextToolbarButton
-
-Slot to extend the format toolbar. Use it in the edit function of a `registerFormatType` call to surface the format to the UI.
-
-### Example
-
-{% codetabs %}
-{% ES5 %}
-```js
-wp.richText.registerFormatType( /* ... */, {
-	/* ... */
-	edit: function( props ) {
-		return wp.element.createElement(
-			wp.editor.RichTextToolbarButton, {
-				icon: 'editor-code',
-				title: 'My formatting button',
-				onClick: function() { /* ... */ }
-				isActive: props.isActive,
-			} );
-	},
-	/* ... */
-} );
-```
-{% ESNext %}
-```js
-import { registerFormatType } from 'wp-rich-text';
-import { richTextToolbarButton } from 'wp-editor';
-
-registerFormatType( /* ... */, {
-	/* ... */
-	edit( { isActive } ) {
-		return (
-			<RichTextToolbarButton
-				icon={ 'editor-code' }
-				title={ 'My formatting button' }
-				onClick={ /* ... */ }
-				isActive={ isActive }
-				/>
-		);
-	},
-	/* ... */
-} );
+<RichText
+	tagName="h2"
+	value={ value }
+	onChange={ ( content ) => {} }
+/>
 ```
 {% end %}
