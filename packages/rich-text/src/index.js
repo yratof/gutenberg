@@ -33,3 +33,5 @@ export { outdentListItems as __unstableOutdentListItems } from './outdent-list-i
 export { changeListType as __unstableChangeListType } from './change-list-type';
 export { updateFormats as __unstableUpdateFormats } from './update-formats';
 export { getActiveFormats as __unstableGetActiveFormats } from './get-active-formats';
+
+export { default as RichText } from './component';
