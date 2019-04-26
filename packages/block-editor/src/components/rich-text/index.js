@@ -12,7 +12,7 @@ import { withDispatch, withSelect } from '@wordpress/data';
 import { pasteHandler, children } from '@wordpress/blocks';
 import { withInstanceId, compose } from '@wordpress/compose';
 import { RichText, __unstableToDom as toDom } from '@wordpress/rich-text';
-import { withFilters, KeyboardShortcuts, IsolatedEventContainer } from '@wordpress/components';
+import { withFilters, IsolatedEventContainer } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -23,6 +23,7 @@ import FormatToolbar from './format-toolbar';
 import { getPatterns, getEnterPatterns } from './patterns';
 import { withBlockEditContext } from '../block-edit/context';
 import { ListEdit } from './list-edit';
+import { RemoveBrowserShortcuts } from './remove-browser-shortcuts';
 
 const wrapperClasses = 'editor-rich-text block-editor-rich-text';
 const classes = 'editor-rich-text__editable block-editor-rich-text__editable';
@@ -77,7 +78,6 @@ class RichTextWraper extends Component {
 				__unstableEnterPatterns={ getEnterPatterns() }
 				__unstablePasteHandler={ pasteHandler }
 				__unstableAutocomplete={ Autocomplete }
-				__unstableKeyboardShortcuts={ KeyboardShortcuts }
 			>
 				{ ( { isSelected, value, onChange } ) => (
 					<Fragment>
@@ -99,6 +99,7 @@ class RichTextWraper extends Component {
 								<FormatToolbar />
 							</IsolatedEventContainer>
 						) }
+						{ isSelected && <RemoveBrowserShortcuts /> }
 					</Fragment>
 				) }
 			</RichText>

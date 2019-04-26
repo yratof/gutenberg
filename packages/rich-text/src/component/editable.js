@@ -111,7 +111,7 @@ export default class Editable extends Component {
 		if ( ! isEqual( this.props.style, nextProps.style ) ) {
 			this.editorNode.setAttribute( 'style', '' );
 			Object.assign( this.editorNode.style, {
-				...nextProps.style,
+				...( nextProps.style || {} ),
 				whiteSpace: 'pre-wrap',
 			} );
 		}
@@ -154,7 +154,7 @@ export default class Editable extends Component {
 	render() {
 		const {
 			tagName = 'div',
-			style,
+			style = {},
 			record,
 			valueToEditableHTML,
 			className,

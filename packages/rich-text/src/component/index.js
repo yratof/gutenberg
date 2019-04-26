@@ -29,7 +29,6 @@ import isShallowEqual from '@wordpress/is-shallow-equal';
 import FormatEdit from './format-edit';
 import Editable from './editable';
 import { pickAriaProps } from './aria';
-import { RemoveBrowserShortcuts } from './remove-browser-shortcuts';
 import { isEmpty, isEmptyLine } from '../is-empty';
 import { create } from '../create';
 import { apply, toDom } from '../to-dom';
@@ -1010,8 +1009,6 @@ class RichText extends Component {
 			children,
 			// To do: move autocompletion logic to rich-text.
 			__unstableAutocomplete: Autocomplete = ( { children: ch } ) => ch(),
-			// To do: use browser shortcuts to trigger undo/redo.
-			__unstableKeyboardShortcuts: KeyboardShortcuts,
 		} = this.props;
 
 		// Generating a key that includes `tagName` ensures that if the tag
@@ -1069,7 +1066,6 @@ class RichText extends Component {
 						</Fragment>
 					) }
 				</Autocomplete>
-				{ isSelected && <RemoveBrowserShortcuts KeyboardShortcuts={ KeyboardShortcuts } /> }
 			</div>
 		);
 	}

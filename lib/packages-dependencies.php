@@ -254,7 +254,6 @@ return array(
 		'wp-escape-html',
 		'wp-hooks',
 		'wp-html-entities',
-		'wp-i18n',
 		'wp-is-shallow-equal',
 		'wp-keycodes',
 		'wp-url',
