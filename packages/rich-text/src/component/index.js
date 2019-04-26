@@ -1032,7 +1032,7 @@ class RichText extends Component {
 			autocompleters,
 			children,
 			// To do: move autocompletion logic to rich-text.
-			__unstableAutocomplete: Autocomplete,
+			__unstableAutocomplete: Autocomplete = ( { children: ch } ) => ch(),
 			// To do: use browser shortcuts to trigger undo/redo.
 			__unstableKeyboardShortcuts: KeyboardShortcuts,
 		} = this.props;
@@ -1044,88 +1044,54 @@ class RichText extends Component {
 		const MultilineTag = this.multilineTag;
 		const ariaProps = pickAriaProps( this.props );
 		const isPlaceholderVisible = placeholder && ( ! isSelected || keepPlaceholderOnFocus ) && this.isEmpty();
-		const classes = classnames( wrapperClassName, 'editor-rich-text block-editor-rich-text' );
 		const record = this.getRecord();
 
 		return (
-			<div className={ classes }>
+			<div className={ classnames( 'rich-text', wrapperClassName ) }>
 				{ children( { isSelected, value: record, onChange: this.onChange } ) }
-				{ Autocomplete ?
-					<Autocomplete
-						onReplace={ this.props.onReplace }
-						completers={ autocompleters }
-						record={ record }
-						onChange={ this.onChange }
-					>
-						{ ( { listBoxId, activeId } ) => (
-							<Fragment>
-								<Editable
-									tagName={ Tagname }
-									style={ style }
-									record={ record }
-									valueToEditableHTML={ this.valueToEditableHTML }
-									isPlaceholderVisible={ isPlaceholderVisible }
-									aria-label={ placeholder }
-									aria-autocomplete="list"
-									aria-owns={ listBoxId }
-									aria-activedescendant={ activeId }
-									{ ...ariaProps }
-									className={ className }
-									key={ key }
-									onPaste={ this.onPaste }
-									onInput={ this.onInput }
-									onCompositionEnd={ this.onCompositionEnd }
-									onKeyDown={ this.onKeyDown }
-									onFocus={ this.onFocus }
-									onBlur={ this.onBlur }
-									onMouseDown={ this.onPointerDown }
-									onTouchStart={ this.onPointerDown }
-									setRef={ this.setRef }
-								/>
-								{ isPlaceholderVisible &&
-									<Tagname
-										className={ classnames( 'editor-rich-text__editable block-editor-rich-text__editable', className ) }
-										style={ style }
-									>
-										{ MultilineTag ? <MultilineTag>{ placeholder }</MultilineTag> : placeholder }
-									</Tagname>
-								}
-								{ isSelected && <FormatEdit value={ record } onChange={ this.onChange } /> }
-							</Fragment>
-						) }
-					</Autocomplete> :
-					<Fragment>
-						<Editable
-							tagName={ Tagname }
-							style={ style }
-							record={ record }
-							valueToEditableHTML={ this.valueToEditableHTML }
-							isPlaceholderVisible={ isPlaceholderVisible }
-							aria-label={ placeholder }
-							{ ...ariaProps }
-							className={ className }
-							key={ key }
-							onPaste={ this.onPaste }
-							onInput={ this.onInput }
-							onCompositionEnd={ this.onCompositionEnd }
-							onKeyDown={ this.onKeyDown }
-							onFocus={ this.onFocus }
-							onBlur={ this.onBlur }
-							onMouseDown={ this.onPointerDown }
-							onTouchStart={ this.onPointerDown }
-							setRef={ this.setRef }
-						/>
-						{ isPlaceholderVisible &&
-							<Tagname
-								className={ classnames( 'editor-rich-text__editable block-editor-rich-text__editable', className ) }
+				<Autocomplete
+					onReplace={ this.props.onReplace }
+					completers={ autocompleters }
+					record={ record }
+					onChange={ this.onChange }
+				>
+					{ ( { listBoxId, activeId } ) => (
+						<Fragment>
+							<Editable
+								tagName={ Tagname }
 								style={ style }
-							>
-								{ MultilineTag ? <MultilineTag>{ placeholder }</MultilineTag> : placeholder }
-							</Tagname>
-						}
-						{ isSelected && <FormatEdit value={ record } onChange={ this.onChange } /> }
-					</Fragment>
-				}
+								record={ record }
+								valueToEditableHTML={ this.valueToEditableHTML }
+								isPlaceholderVisible={ isPlaceholderVisible }
+								aria-label={ placeholder }
+								aria-autocomplete={ listBoxId ? 'list' : undefined }
+								aria-owns={ listBoxId }
+								aria-activedescendant={ activeId }
+								{ ...ariaProps }
+								className={ className }
+								key={ key }
+								onPaste={ this.onPaste }
+								onInput={ this.onInput }
+								onCompositionEnd={ this.onCompositionEnd }
+								onKeyDown={ this.onKeyDown }
+								onFocus={ this.onFocus }
+								onBlur={ this.onBlur }
+								onMouseDown={ this.onPointerDown }
+								onTouchStart={ this.onPointerDown }
+								setRef={ this.setRef }
+							/>
+							{ isPlaceholderVisible &&
+								<Tagname
+									className={ classnames( 'editor-rich-text__editable block-editor-rich-text__editable', className ) }
+									style={ style }
+								>
+									{ MultilineTag ? <MultilineTag>{ placeholder }</MultilineTag> : placeholder }
+								</Tagname>
+							}
+							{ isSelected && <FormatEdit value={ record } onChange={ this.onChange } /> }
+						</Fragment>
+					) }
+				</Autocomplete>
 				{ isSelected && <RemoveBrowserShortcuts KeyboardShortcuts={ KeyboardShortcuts } /> }
 			</div>
 		);

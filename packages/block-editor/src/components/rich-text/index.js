@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import classnames from 'classnames';
 import { omit } from 'lodash';
 
 /**
@@ -23,12 +24,21 @@ import { getPatterns, getEnterPatterns } from './patterns';
 import { withBlockEditContext } from '../block-edit/context';
 import { ListEdit } from './list-edit';
 
+const className = 'editor-rich-text block-editor-rich-text';
+
 const RichTextWraper = ( props ) => {
-	const { tagName, multiline, onTagNameChange, inlineToolbar } = props;
+	const {
+		tagName,
+		multiline,
+		onTagNameChange,
+		inlineToolbar,
+		wrapperClassName,
+	} = props;
 
 	return (
 		<RichText
 			{ ...props }
+			wrapperClassName={ classnames( className, wrapperClassName ) }
 			__unstablePatterns={ getPatterns() }
 			__unstableEnterPatterns={ getEnterPatterns() }
 			__unstablePasteHandler={ pasteHandler }
