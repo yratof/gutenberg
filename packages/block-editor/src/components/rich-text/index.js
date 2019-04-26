@@ -7,11 +7,11 @@ import { omit } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { Fragment, RawHTML } from '@wordpress/element';
+import { Component, Fragment, RawHTML } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { pasteHandler, children } from '@wordpress/blocks';
 import { withInstanceId, compose } from '@wordpress/compose';
-import { RichText } from '@wordpress/rich-text';
+import { RichText, __unstableToDom as toDom } from '@wordpress/rich-text';
 import { withFilters, KeyboardShortcuts, IsolatedEventContainer } from '@wordpress/components';
 
 /**
@@ -26,52 +26,82 @@ import { ListEdit } from './list-edit';
 
 const className = 'editor-rich-text block-editor-rich-text';
 
-const RichTextWraper = ( props ) => {
-	const {
-		tagName,
-		multiline,
-		onTagNameChange,
-		inlineToolbar,
-		wrapperClassName,
-	} = props;
+class RichTextWraper extends Component {
+	constructor( { value } ) {
+		super( ...arguments );
 
-	return (
-		<RichText
-			{ ...props }
-			wrapperClassName={ classnames( className, wrapperClassName ) }
-			__unstablePatterns={ getPatterns() }
-			__unstableEnterPatterns={ getEnterPatterns() }
-			__unstablePasteHandler={ pasteHandler }
-			__unstableChildrenToHTML={ children.toHTML }
-			__unstableChildrenFromDom={ children.fromDom }
-			__unstableAutocomplete={ Autocomplete }
-			__unstableKeyboardShortcuts={ KeyboardShortcuts }
-		>
-			{ ( { isSelected, value, onChange } ) => (
-				<Fragment>
-					{ isSelected && multiline === 'li' && (
-						<ListEdit
-							onTagNameChange={ onTagNameChange }
-							tagName={ tagName }
-							value={ value }
-							onChange={ onChange }
-						/>
-					) }
-					{ isSelected && ! inlineToolbar && (
-						<BlockFormatControls>
-							<FormatToolbar />
-						</BlockFormatControls>
-					) }
-					{ inlineToolbar && (
-						<IsolatedEventContainer>
-							<FormatToolbar />
-						</IsolatedEventContainer>
-					) }
-				</Fragment>
-			) }
-		</RichText>
-	);
-};
+		this.usedDeprecatedChildrenSource = Array.isArray( value );
+		this.onChangeChildren = this.onChangeChildren.bind( this );
+	}
+
+	onChangeChildren( value ) {
+		const { multiline } = this.props;
+		let multilineTag;
+
+		if ( multiline === true || multiline === 'p' || multiline === 'li' ) {
+			multilineTag = multiline === true ? 'p' : multiline;
+		}
+
+		return children.fromDom( toDom( {
+			value,
+			multilineTag,
+			isEditableTree: false,
+		} ).body.childNodes );
+	}
+
+	render() {
+		let { value: _value, onChange: _onChange } = this.props;
+		const {
+			tagName,
+			multiline,
+			onTagNameChange,
+			inlineToolbar,
+			wrapperClassName,
+		} = this.props;
+
+		if ( this.usedDeprecatedChildrenSource ) {
+			_value = children.toHTML( _value );
+			_onChange = this.onChangeChildren;
+		}
+
+		return (
+			<RichText
+				{ ...this.props }
+				value={ _value }
+				onChange={ _onChange }
+				wrapperClassName={ classnames( className, wrapperClassName ) }
+				__unstablePatterns={ getPatterns() }
+				__unstableEnterPatterns={ getEnterPatterns() }
+				__unstablePasteHandler={ pasteHandler }
+				__unstableAutocomplete={ Autocomplete }
+				__unstableKeyboardShortcuts={ KeyboardShortcuts }
+			>
+				{ ( { isSelected, value, onChange } ) => (
+					<Fragment>
+						{ isSelected && multiline === 'li' && (
+							<ListEdit
+								onTagNameChange={ onTagNameChange }
+								tagName={ tagName }
+								value={ value }
+								onChange={ onChange }
+							/>
+						) }
+						{ isSelected && ! inlineToolbar && (
+							<BlockFormatControls>
+								<FormatToolbar />
+							</BlockFormatControls>
+						) }
+						{ inlineToolbar && (
+							<IsolatedEventContainer>
+								<FormatToolbar />
+							</IsolatedEventContainer>
+						) }
+					</Fragment>
+				) }
+			</RichText>
+		);
+	}
+}
 
 const RichTextContainer = compose( [
 	withInstanceId,

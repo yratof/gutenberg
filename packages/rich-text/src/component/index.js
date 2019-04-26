@@ -138,7 +138,6 @@ class RichText extends Component {
 
 		this.state = {};
 
-		this.usedDeprecatedChildrenSource = Array.isArray( value );
 		this.lastHistoryValue = value;
 
 		// Internal values that are update synchronously, unlike props.
@@ -934,17 +933,6 @@ class RichText extends Component {
 	 * @return {Object} An internal rich-text value.
 	 */
 	formatToValue( value ) {
-		const { __unstableChildrenToHTML: childrenToHTML } = this.props;
-
-		// Handle deprecated `children` and `node` sources.
-		if ( childrenToHTML && Array.isArray( value ) ) {
-			return create( {
-				html: childrenToHTML( value ),
-				multilineTag: this.multilineTag,
-				multilineWrapperTags: this.multilineWrapperTags,
-			} );
-		}
-
 		if ( this.props.format === 'string' ) {
 			return create( {
 				html: value,
@@ -997,18 +985,7 @@ class RichText extends Component {
 	 * @return {*} The external data format, data type depends on props.
 	 */
 	valueToFormat( value ) {
-		const { __unstableChildrenFromDom: childrenFromDom } = this.props;
-
 		value = this.removeEditorOnlyFormats( value );
-
-		// Handle deprecated `children` and `node` sources.
-		if ( this.usedDeprecatedChildrenSource && childrenFromDom ) {
-			return childrenFromDom( toDom( {
-				value,
-				multilineTag: this.multilineTag,
-				isEditableTree: false,
-			} ).body.childNodes );
-		}
 
 		if ( this.props.format === 'string' ) {
 			return toHTMLString( {
