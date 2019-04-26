@@ -23,7 +23,7 @@ export { insertLineSeparator as __unstableInsertLineSeparator } from './insert-l
 export { insertObject } from './insert-object';
 export { slice } from './slice';
 export { split } from './split';
-export { apply as __unstableApply, toDom as __unstableToDom } from './to-dom';
+export { toDom as __unstableToDom } from './to-dom';
 export { toHTMLString } from './to-html-string';
 export { toggleFormat } from './toggle-format';
 export { LINE_SEPARATOR as __UNSTABLE_LINE_SEPARATOR } from './special-characters';
@@ -31,8 +31,6 @@ export { unregisterFormatType } from './unregister-format-type';
 export { indentListItems as __unstableIndentListItems } from './indent-list-items';
 export { outdentListItems as __unstableOutdentListItems } from './outdent-list-items';
 export { changeListType as __unstableChangeListType } from './change-list-type';
-export { updateFormats as __unstableUpdateFormats } from './update-formats';
-export { getActiveFormats as __unstableGetActiveFormats } from './get-active-formats';
 
 export { default as RichText } from './component';
 export { default as __unstableFormatEdit } from './component/format-edit';
