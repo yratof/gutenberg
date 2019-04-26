@@ -1024,7 +1024,7 @@ class RichText extends Component {
 		const record = this.getRecord();
 
 		return (
-			<div className={ classnames( 'rich-text', wrapperClassName ) }>
+			<div className={ wrapperClassName }>
 				{ children( { isSelected, value: record, onChange: this.onChange } ) }
 				<Autocomplete
 					onReplace={ this.props.onReplace }
@@ -1045,7 +1045,7 @@ class RichText extends Component {
 								aria-owns={ listBoxId }
 								aria-activedescendant={ activeId }
 								{ ...ariaProps }
-								className={ className }
+								className={ classnames( 'rich-text', className ) }
 								key={ key }
 								onPaste={ this.onPaste }
 								onInput={ this.onInput }

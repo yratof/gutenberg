@@ -1,21 +1,9 @@
-
 .block-editor-rich-text {
 	// This is needed to position the formatting toolbar.
 	position: relative;
 }
 
 .block-editor-rich-text__editable {
-	position: relative;
-	// In HTML, leading and trailing spaces are not visible, and multiple spaces
-	// elsewhere are visually reduced to one space. This rule prevents spaces
-	// from collapsing so all space is visible in the editor and can be removed.
-	// It also prevents some browsers from inserting non-breaking spaces at the
-	// end of a line to prevent the space from visually disappearing. Sometimes
-	// these non breaking spaces can linger in the editor causing unwanted non
-	// breaking spaces in between words. If also prevent Firefox from inserting
-	// a trailing `br` node to visualise any trailing space, causing the element
-	// to be saved.
-	white-space: pre-wrap !important;
 
 	> p:first-child {
 		margin-top: 0;

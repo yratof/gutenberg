@@ -24,7 +24,8 @@ import { getPatterns, getEnterPatterns } from './patterns';
 import { withBlockEditContext } from '../block-edit/context';
 import { ListEdit } from './list-edit';
 
-const className = 'editor-rich-text block-editor-rich-text';
+const wrapperClasses = 'editor-rich-text block-editor-rich-text';
+const classes = 'editor-rich-text__editable block-editor-rich-text__editable';
 
 class RichTextWraper extends Component {
 	constructor( { value } ) {
@@ -57,6 +58,7 @@ class RichTextWraper extends Component {
 			onTagNameChange,
 			inlineToolbar,
 			wrapperClassName,
+			className,
 		} = this.props;
 
 		if ( this.usedDeprecatedChildrenSource ) {
@@ -69,7 +71,8 @@ class RichTextWraper extends Component {
 				{ ...this.props }
 				value={ _value }
 				onChange={ _onChange }
-				wrapperClassName={ classnames( className, wrapperClassName ) }
+				wrapperClassName={ classnames( wrapperClasses, wrapperClassName ) }
+				className={ classnames( classes, className ) }
 				__unstablePatterns={ getPatterns() }
 				__unstableEnterPatterns={ getEnterPatterns() }
 				__unstablePasteHandler={ pasteHandler }

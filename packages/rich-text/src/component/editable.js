@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { isEqual } from 'lodash';
-import classnames from 'classnames';
 
 /**
  * WordPress dependencies
@@ -83,7 +82,6 @@ function applyInternetExplorerInputFix( editorNode ) {
 }
 
 const IS_PLACEHOLDER_VISIBLE_ATTR_NAME = 'data-is-placeholder-visible';
-const CLASS_NAME = 'editor-rich-text__editable block-editor-rich-text__editable';
 
 /**
  * Whether or not the user agent is Internet Explorer.
@@ -112,11 +110,14 @@ export default class Editable extends Component {
 
 		if ( ! isEqual( this.props.style, nextProps.style ) ) {
 			this.editorNode.setAttribute( 'style', '' );
-			Object.assign( this.editorNode.style, nextProps.style );
+			Object.assign( this.editorNode.style, {
+				...nextProps.style,
+				whiteSpace: 'pre-wrap',
+			} );
 		}
 
 		if ( ! isEqual( this.props.className, nextProps.className ) ) {
-			this.editorNode.className = classnames( nextProps.className, CLASS_NAME );
+			this.editorNode.className = nextProps.className;
 		}
 
 		const { removedKeys, updatedKeys } = diffAriaProps( this.props, nextProps );
@@ -163,14 +164,25 @@ export default class Editable extends Component {
 
 		delete remainingProps.setRef;
 
+		// In HTML, leading and trailing spaces are not visible, and multiple
+		// spaces elsewhere are visually reduced to one space. This rule
+		// prevents spaces from collapsing so all space is visible in the editor
+		// and can be removed.
+		// It also prevents some browsers from inserting non-breaking spaces at
+		// the end of a line to prevent the space from visually disappearing.
+		// Sometimes these non breaking spaces can linger in the editor causing
+		// unwanted non breaking spaces in between words. If also prevent
+		// Firefox from inserting a trailing `br` node to visualise any trailing
+		// space, causing the element to be saved.
+		style.whiteSpace = 'pre-wrap';
+
 		return createElement( tagName, {
 			role: 'textbox',
 			'aria-multiline': true,
-			className: classnames( className, CLASS_NAME ),
+			className,
 			contentEditable: true,
 			[ IS_PLACEHOLDER_VISIBLE_ATTR_NAME ]: isPlaceholderVisible,
 			ref: this.bindEditorNode,
-			style,
 			suppressContentEditableWarning: true,
 			dangerouslySetInnerHTML: { __html: valueToEditableHTML( record ) },
 			...remainingProps,
