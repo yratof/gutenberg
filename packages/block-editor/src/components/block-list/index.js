@@ -13,13 +13,14 @@ import {
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
+import { Component, RawHTML } from '@wordpress/element';
 import {
 	withSelect,
 	withDispatch,
 	__experimentalAsyncModeProvider as AsyncModeProvider,
 } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -50,6 +51,9 @@ class BlockList extends Component {
 
 		this.lastClientY = 0;
 		this.nodes = {};
+		this.state = {
+			notes: [],
+		};
 	}
 
 	componentDidMount() {
@@ -188,6 +192,22 @@ class BlockList extends Component {
 		}
 	}
 
+	componentDidUpdate( prevProps ) {
+		if ( this.props.blockAttributes === prevProps.blockAttributes ) {
+			return;
+		}
+
+		const noteAnchors = document.querySelectorAll( '.note-anchor' );
+		const notes = Array.from( noteAnchors ).map( ( element ) => {
+			return {
+				note: element.getAttribute( 'data-note' ),
+				id: element.getAttribute( 'href' ).slice( 1 ),
+			};
+		} );
+
+		this.setState( { notes } );
+	}
+
 	render() {
 		const {
 			blockClientIds,
@@ -226,6 +246,50 @@ class BlockList extends Component {
 					rootClientId={ rootClientId }
 					renderAppender={ renderAppender }
 				/>
+
+				<footer>
+					<h2><small>Notes</small></h2>
+					<style
+						dangerouslySetInnerHTML={ {
+							__html: `
+body {
+	counter-reset: footnotes;
+}
+
+.editor-styles-wrapper a.note-anchor {
+	counter-increment: footnotes;
+}
+
+.note-anchor:after {
+	margin-left: 2px;
+	content: counter( footnotes );
+	vertical-align: super;
+	font-size: smaller;
+}
+`
+						} }
+					/>
+					{ this.state.notes.length > 0 &&
+						<ol>
+							{ this.state.notes.map( ( { note, id } ) =>
+								<li id={ id } key={ id }>
+									<span
+										dangerouslySetInnerHTML={ {
+											__html: note
+										} }
+									/>
+									{ ' ' }
+									<a
+										href={ `#${ id }-anchor` }
+										aria-label={ __( 'Back to content' ) }
+									>
+										↩
+									</a>
+								</li>
+							) }
+						</ol>
+					}
+				</footer>
 			</div>
 		);
 	}
@@ -246,6 +310,7 @@ export default compose( [
 			getSelectedBlockClientId,
 			getMultiSelectedBlockClientIds,
 			hasMultiSelection,
+			getBlockAttributesRef,
 		} = select( 'core/block-editor' );
 
 		const { rootClientId } = ownProps;
@@ -259,6 +324,7 @@ export default compose( [
 			selectedBlockClientId: getSelectedBlockClientId(),
 			multiSelectedBlockClientIds: getMultiSelectedBlockClientIds(),
 			hasMultiSelection: hasMultiSelection(),
+			blockAttributes: getBlockAttributesRef(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {

@@ -226,6 +226,10 @@ export const getBlocks = createSelector(
 	]
 );
 
+export const getBlockAttributesRef = ( state ) => {
+	return state.blocks.attributes;
+};
+
 /**
  * Returns an array containing the clientIds of all descendants
  * of the blocks given.
