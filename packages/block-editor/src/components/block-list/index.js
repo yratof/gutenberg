@@ -13,7 +13,7 @@ import {
 /**
  * WordPress dependencies
  */
-import { Component, RawHTML } from '@wordpress/element';
+import { Component } from '@wordpress/element';
 import {
 	withSelect,
 	withDispatch,
@@ -200,8 +200,8 @@ class BlockList extends Component {
 		const noteAnchors = document.querySelectorAll( '.note-anchor' );
 		const notes = Array.from( noteAnchors ).map( ( element ) => {
 			return {
-				note: element.getAttribute( 'data-note' ),
-				id: element.getAttribute( 'href' ).slice( 1 ),
+				note: element.getAttribute( 'data-note' ) || '',
+				id: ( element.getAttribute( 'href' ) || '' ).slice( 1 ),
 			};
 		} );
 
@@ -247,35 +247,36 @@ class BlockList extends Component {
 					renderAppender={ renderAppender }
 				/>
 
-				<footer>
-					<h2><small>Notes</small></h2>
-					<style
-						dangerouslySetInnerHTML={ {
-							__html: `
-body {
-	counter-reset: footnotes;
-}
+				{ /* This needs to become a slot/fill */ }
+				{ this.state.notes.length > 0 && ! rootClientId &&
+					<footer>
+						<h2><small>Notes</small></h2>
+						<style
+							dangerouslySetInnerHTML={ {
+								__html: `
+	body {
+		counter-reset: footnotes;
+	}
 
-.editor-styles-wrapper a.note-anchor {
-	counter-increment: footnotes;
-}
+	.editor-styles-wrapper a.note-anchor {
+		counter-increment: footnotes;
+	}
 
-.note-anchor:after {
-	margin-left: 2px;
-	content: counter( footnotes );
-	vertical-align: super;
-	font-size: smaller;
-}
-`
-						} }
-					/>
-					{ this.state.notes.length > 0 &&
+	.note-anchor:after {
+		margin-left: 2px;
+		content: '[' counter( footnotes ) ']';
+		vertical-align: super;
+		font-size: smaller;
+	}
+	`,
+							} }
+						/>
 						<ol>
 							{ this.state.notes.map( ( { note, id } ) =>
 								<li id={ id } key={ id }>
 									<span
 										dangerouslySetInnerHTML={ {
-											__html: note
+											__html: note,
 										} }
 									/>
 									{ ' ' }
@@ -288,8 +289,8 @@ body {
 								</li>
 							) }
 						</ol>
-					}
-				</footer>
+					</footer>
+				}
 			</div>
 		);
 	}

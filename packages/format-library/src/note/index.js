@@ -3,15 +3,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Component, Fragment } from '@wordpress/element';
-import { withSpokenMessages } from '@wordpress/components';
-import {
-	getTextContent,
-	applyFormat,
-	removeFormat,
-	slice,
-} from '@wordpress/rich-text';
-import { isURL, isEmail } from '@wordpress/url';
-import { RichTextToolbarButton, RichTextShortcut } from '@wordpress/block-editor';
+import { removeFormat } from '@wordpress/rich-text';
+import { RichTextToolbarButton } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -31,7 +24,7 @@ export const note = {
 		href: 'href',
 		id: 'id',
 	},
-	edit: withSpokenMessages( class NoteEdit extends Component {
+	edit: class NoteEdit extends Component {
 		constructor() {
 			super( ...arguments );
 
@@ -53,13 +46,13 @@ export const note = {
 		}
 
 		remove() {
-			const { value, onChange, speak } = this.props;
+			const { value, onChange } = this.props;
 
 			onChange( removeFormat( value, name ) );
 		}
 
 		render() {
-			const { isActive, activeAttributes, value, onChange } = this.props;
+			const { isActive, activeAttributes, isObjectActive, activeObjectAttributes, value, onChange } = this.props;
 
 			return (
 				<Fragment>
@@ -74,11 +67,13 @@ export const note = {
 						onClose={ this.close }
 						isActive={ isActive }
 						activeAttributes={ activeAttributes }
+						isObjectActive={ isObjectActive }
+						activeObjectAttributes={ activeObjectAttributes }
 						value={ value }
 						onChange={ onChange }
 					/>
 				</Fragment>
 			);
 		}
-	} ),
+	},
 };

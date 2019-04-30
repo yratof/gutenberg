@@ -8,15 +8,14 @@ import uuid from 'uuid/v4';
  */
 import { __ } from '@wordpress/i18n';
 import { Component, useMemo } from '@wordpress/element';
-import { IconButton, Popover } from '@wordpress/components';
+import { Popover } from '@wordpress/components';
 import { LEFT, RIGHT, UP, DOWN, BACKSPACE, ENTER } from '@wordpress/keycodes';
 import { getRectangleFromRange } from '@wordpress/dom';
 import {
-	create,
-	insert,
 	isCollapsed,
 	applyFormat,
 	removeFormat,
+	insertObject,
 } from '@wordpress/rich-text';
 
 const stopPropagation = ( event ) => event.stopPropagation();
@@ -76,7 +75,7 @@ export default class InlineUI extends Component {
 		this.setState( { inputValue: event.target.value } );
 	}
 
-	onSubmit( event ) {
+	onSubmit() {
 		const { isActive, value, onChange } = this.props;
 		const { inputValue } = this.state;
 		const type = 'core/note';
@@ -94,11 +93,11 @@ export default class InlineUI extends Component {
 
 		let newValue;
 
+		// To do: handle object.
 		if ( ! inputValue ) {
 			newValue = removeFormat( value, type );
 		} else if ( isCollapsed( value ) && ! isActive ) {
-			const toInsert = applyFormat( create( { text: '*' } ), format, 0, 1 );
-			newValue = insert( value, toInsert );
+			newValue = insertObject( value, format );
 		} else {
 			newValue = applyFormat( value, format );
 		}
@@ -113,12 +112,13 @@ export default class InlineUI extends Component {
 	}
 
 	render() {
-		const { isActive, activeAttributes: { note = '' }, isOpen, value } = this.props;
+		const { isActive, activeAttributes, isObjectActive, activeObjectAttributes, isOpen, value } = this.props;
 
-		if ( ! isActive && ! isOpen ) {
+		if ( ! isActive && ! isObjectActive && ! isOpen ) {
 			return null;
 		}
 
+		const note = activeAttributes.note || activeObjectAttributes.note || '';
 		const { inputValue } = this.state;
 		const val = inputValue === undefined ? note : inputValue;
 
@@ -127,7 +127,7 @@ export default class InlineUI extends Component {
 		return (
 			<PopoverAtLink
 				value={ value }
-				isActive={ isActive }
+				isActive={ isActive || isObjectActive }
 				isOpen={ true }
 				focusOnMount={ isOpen ? 'firstElement' : false }
 				className="note-popover"
