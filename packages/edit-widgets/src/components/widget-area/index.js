@@ -5,6 +5,7 @@ import { Panel, PanelBody } from '@wordpress/components';
 import {
 	BlockEditorProvider,
 	BlockList,
+	ObserveTyping,
 } from '@wordpress/block-editor';
 import { useState } from '@wordpress/element';
 
@@ -22,7 +23,9 @@ function WidgetArea( { title, initialOpen } ) {
 					onInput={ updateBlocks }
 					onChange={ updateBlocks }
 				>
-					<BlockList />
+					<ObserveTyping>
+						<BlockList />
+					</ObserveTyping>
 				</BlockEditorProvider>
 			</PanelBody>
 		</Panel>
