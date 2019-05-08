@@ -7,6 +7,7 @@
 ### Bug Fixes
 
 - Fixed display of reset button when using RangeControl `allowReset` prop.
+- Although `DateTimePicker` does not allow picking the seconds, passed the current seconds as the selected value for seconds when calling `onChange`. Now it passes zero.
 
 ## 7.3.0 (2019-04-16)
 
