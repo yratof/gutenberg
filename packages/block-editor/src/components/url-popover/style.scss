@@ -1,3 +1,19 @@
+$icon_size: 30px;
+$icon_padding: 3px;
+
+.block-editor-url-popover > .components-popover__content {
+	border: none;
+}
+
+.block-editor-url-popover__input-container,
+.block-editor-url-popover__additional-controls {
+	border: $border-width solid $light-gray-500;
+}
+.block-editor-url-popover__additional-controls {
+	border-top: none;
+}
+
+
 .block-editor-url-popover__row {
 	display: flex;
 }
@@ -9,14 +25,14 @@
 }
 
 // Mimic toolbar component styles for the icons in this popover.
-.block-editor-url-popover .components-icon-button {
-	padding: 3px;
+.block-editor-url-popover .block-editor-url-popover__input-container .components-icon-button {
+	padding: $icon_padding;
 
 	> svg {
 		padding: 5px;
 		border-radius: $radius-round-rectangle;
-		height: 30px;
-		width: 30px;
+		height: $icon_size;
+		width: $icon_size;
 	}
 
 	&:not(:disabled):not([aria-disabled="true"]):not(.is-default):hover {
@@ -50,10 +66,35 @@
 }
 
 .block-editor-url-popover__settings {
+	display: block;
 	padding: $panel-padding;
 	border-top: $border-width solid $light-gray-500;
 
 	.components-base-control:last-child .components-base-control__field {
 		margin-bottom: 0;
 	}
+}
+
+.block-editor-url-popover__link-editor,
+.block-editor-url-popover__link-viewer {
+	display: flex;
+}
+
+.block-editor-url-popover__link-viewer-url {
+	margin: $grid-size - $border-width;
+	flex-grow: 1;
+	flex-shrink: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 150px;
+	max-width: 500px;
+
+	&.has-invalid-link {
+		color: $alert-red;
+	}
+}
+
+.block-editor-url-popover__additional-controls {
+	width: calc(100% - #{2 * ($icon_padding + $icon_size + $icon_padding)});
 }
