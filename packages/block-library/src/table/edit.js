@@ -510,6 +510,7 @@ export class TableEdit extends Component {
 					value={ caption }
 					onChange={ ( value ) => setAttributes( { caption: value } ) }
 					unstableOnFocus={ () => this.setState( { selectedCell: null } ) }
+					inlineToolbar
 				/>
 			</>
 		);
