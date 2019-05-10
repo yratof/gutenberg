@@ -41,12 +41,7 @@
 		padding: 0.5em;
 	}
 
-	caption {
-		visibility: hidden;
-		height: 0;
-	}
-
-	&__caption-content {
+	&__caption {
 		@include caption-style-theme();
 		overflow: hidden;
 		height: 0;
