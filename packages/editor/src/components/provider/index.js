@@ -11,7 +11,7 @@ import { compose } from '@wordpress/compose';
 import { Component } from '@wordpress/element';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { BlockEditorProvider } from '@wordpress/block-editor';
+import { BlockEditorProvider, transformStyles } from '@wordpress/block-editor';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
@@ -19,7 +19,6 @@ import { decodeEntities } from '@wordpress/html-entities';
 /**
  * Internal dependencies
  */
-import transformStyles from '../../editor-styles';
 import { mediaUpload } from '../../utils';
 import ReusableBlocksButtons from '../reusable-blocks-buttons';
 
