@@ -8,7 +8,7 @@ import { View, Text, TouchableWithoutFeedback } from 'react-native';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { Dashicon } from '@wordpress/components';
-import { MediaUpload, MEDIA_TYPE_IMAGE, MEDIA_TYPE_VIDEO } from '@wordpress/block-editor';
+import { default as withMediaUpload, MEDIA_TYPE_IMAGE, MEDIA_TYPE_VIDEO } from '../media-upload';
 
 /**
  * Internal dependencies
@@ -57,35 +57,32 @@ function MediaPlaceholder( props ) {
 	}
 
 	return (
-		<MediaUpload
-			mediaType={ mediaType }
-			onSelectURL={ onSelectURL }
-			render={ ( { open, getMediaOptions } ) => {
-				return (
-					<TouchableWithoutFeedback
-						accessibilityLabel={ sprintf(
-							/* translators: accessibility text for the media block empty state. %s: media type */
-							__( '%s block. Empty' ),
-							placeholderTitle
-						) }
-						accessibilityRole={ 'button' }
-						accessibilityHint={ accessibilityHint }
-						onPress={ open }
-					>
-						<View style={ styles.emptyStateContainer }>
-							{ getMediaOptions() }
-							<Dashicon icon={ placeholderIcon } />
-							<Text style={ styles.emptyStateTitle }>
-								{ placeholderTitle }
-							</Text>
-							<Text style={ styles.emptyStateDescription }>
-								{ instructions }
-							</Text>
-						</View>
-					</TouchableWithoutFeedback>
-				);
-			} } />
+		<TouchableWithoutFeedback
+			accessibilityLabel={ sprintf(
+				/* translators: accessibility text for the media block empty state. %s: media type */
+				__( '%s block. Empty' ),
+				placeholderTitle
+			) }
+			accessibilityRole={ 'button' }
+			accessibilityHint={ accessibilityHint }
+			onPress={ props.presentMediaOptions }
+		>
+			<View style={ styles.emptyStateContainer }>
+				{ props.getMediaOptionsPicker() }
+				<Dashicon icon={ placeholderIcon } />
+				<Text style={ styles.emptyStateTitle }>
+					{ placeholderTitle }
+				</Text>
+				<Text style={ styles.emptyStateDescription }>
+					{ instructions }
+				</Text>
+			</View>
+		</TouchableWithoutFeedback>
 	);
 }
 
-export default MediaPlaceholder;
+export default withMediaUpload(
+	MediaPlaceholder,
+	props => props.mediaType,
+	(props, mediaId, mediaURL) => props.onSelectURL(mediaId, mediaURL)
+);

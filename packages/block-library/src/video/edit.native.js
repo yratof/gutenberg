@@ -23,7 +23,7 @@ import {
 } from '@wordpress/components';
 import {
 	MediaPlaceholder,
-	MediaUpload,
+	withMediaUpload,
 	MEDIA_TYPE_VIDEO,
 	RichText,
 	BlockControls,
@@ -134,21 +134,14 @@ class VideoEdit extends React.Component {
 		const { isMediaRequested, videoContainerHeight } = this.state;
 
 		const toolbarEditButton = (
-			<MediaUpload mediaType={ MEDIA_TYPE_VIDEO }
-				onSelectURL={ this.onSelectMediaUploadOption }
-				render={ ( { open, getMediaOptions } ) => {
-					return (
-						<Toolbar>
-							{ getMediaOptions() }
-							<ToolbarButton
-								label={ __( 'Edit video' ) }
-								icon="edit"
-								onClick={ open }
-							/>
-						</Toolbar>
-					);
-				} } >
-			</MediaUpload>
+			<Toolbar>
+				{ this.props.getMediaOptionsPicker() }
+				<ToolbarButton
+					label={ __( 'Edit video' ) }
+					icon="edit"
+					onClick={ this.props.presentMediaOptions }
+				/>
+			</Toolbar>
 		);
 
 		if ( ! isMediaRequested && ! src ) {
@@ -229,4 +222,11 @@ class VideoEdit extends React.Component {
 	}
 }
 
-export default VideoEdit;
+export default withMediaUpload (
+	VideoEdit,
+	getMediaType => "video",
+	( props, mediaId, mediaURL ) => {
+		const { setAttributes } = props;
+		setAttributes( { url: mediaURL, id: mediaId } );		
+	}
+);

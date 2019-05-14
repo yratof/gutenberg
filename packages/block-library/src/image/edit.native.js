@@ -21,7 +21,7 @@ import {
 } from '@wordpress/components';
 import {
 	MediaPlaceholder,
-	MediaUpload,
+	withMediaUpload,
 	MEDIA_TYPE_IMAGE,
 	RichText,
 	BlockControls,
@@ -166,21 +166,14 @@ class ImageEdit extends React.Component {
 		};
 
 		const toolbarEditButton = (
-			<MediaUpload mediaType={ MEDIA_TYPE_IMAGE }
-				onSelectURL={ this.onSelectMediaUploadOption }
-				render={ ( { open, getMediaOptions } ) => {
-					return (
-						<Toolbar>
-							{ getMediaOptions() }
-							<ToolbarButton
-								title={ __( 'Edit image' ) }
-								icon="edit"
-								onClick={ open }
-							/>
-						</Toolbar>
-					);
-				} } >
-			</MediaUpload>
+			<Toolbar>
+				{ this.props.getMediaOptionsPicker() }
+				<ToolbarButton
+					title={ __( 'Edit image' ) }
+					icon="edit"
+					onClick={ this.props.presentMediaOptions }
+				/>
+			</Toolbar>
 		);
 
 		const getInspectorControls = () => (
@@ -229,7 +222,6 @@ class ImageEdit extends React.Component {
 		return (
 			<TouchableWithoutFeedback
 				accessible={ ! isSelected }
-
 				accessibilityLabel={ sprintf(
 					/* translators: accessibility text. 1: image alt text. 2: image caption. */
 					__( 'Image block. %1$s. %2$s' ),
@@ -238,7 +230,7 @@ class ImageEdit extends React.Component {
 				) }
 				accessibilityRole={ 'button' }
 				onPress={ this.onImagePressed }
-				onLongPress={ url && onMediaOptionsButtonPressed }
+				onLongPress={ url && this.props.presentMediaOptions }
 				disabled={ ! isSelected }
 			>
 				<View style={ { flex: 1 } }>
@@ -272,7 +264,7 @@ class ImageEdit extends React.Component {
 										</View>
 									) }
 									<ImageBackground
-										onLongPress={ onMediaOptionsButtonPressed }
+										onLongPress={ this.props.presentMediaOptions }
 										accessible={ true }
 										disabled={ ! isSelected }
 										accessibilityLabel={ alt }
@@ -326,4 +318,11 @@ class ImageEdit extends React.Component {
 	}
 }
 
-export default ImageEdit;
+export default withMediaUpload(
+	ImageEdit,
+	getMediaType => "image",
+	( props, mediaId, mediaURL ) => {
+		const { setAttributes } = props;
+		setAttributes( { url: mediaURL, id: mediaId } );		
+	}
+);
