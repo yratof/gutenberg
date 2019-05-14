@@ -46,6 +46,17 @@
 		padding-right: $block-container-side-padding;
 	}
 
+	// Don't add side padding for nested blocks.
+	.block-editor-block-list__block & {
+		// Compensate for side UI.
+		padding-left: 0;
+		padding-right: 0;
+
+		// Compensate for block padding.
+		margin-left: -$block-padding;
+		margin-right: -$block-padding;
+	}
+
 	// Space every block, and the default appender, using margins.
 	// This allows margins to collapse, which gives a better representation of how it looks on the frontend.
 	.block-editor-default-block-appender > .block-editor-default-block-appender__content,
