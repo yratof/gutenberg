@@ -9,6 +9,7 @@
 ### New Feature
 
 - Added a new `HorizontalRule` component.
+- `DropdownMenu` now supports passing a [render prop](https://reactjs.org/docs/render-props.html#using-props-other-than-render) as children for more advanced customization.
 - Added a new `DropdownMenuSeparator` component to be used in the new `DropdownMenu` children function option.
 
 ### Bug Fix
