@@ -5,9 +5,10 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: z-index(".block-editor-inner-blocks.has-overlay:after");
+	z-index: z-index(".block-editor-inner-blocks.has-overlay::after");
 }
 
+// These are temporary debug colors.
 .block-editor-inner-blocks.has-overlay {
 	background-color: #00a0d2;
 
