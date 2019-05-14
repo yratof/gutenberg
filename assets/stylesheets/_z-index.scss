@@ -60,7 +60,7 @@ $z-layers: (
 
 	// Small screen inner blocks overlay must be displayed above drop zone,
 	// settings menu, and movers.
-	".block-editor-inner-blocks__small-screen-overlay:after": 120,
+	".block-editor-inner-blocks.has-overlay:after": 120,
 
 	// Show sidebar above wp-admin navigation bar for mobile viewports:
 	// #wpadminbar { z-index: 99999 }
