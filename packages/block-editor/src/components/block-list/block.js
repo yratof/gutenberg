@@ -60,7 +60,6 @@ const preventDrag = ( event ) => {
 
 function BlockListBlock( {
 	blockRef,
-	hasChildSelected,
 	mode,
 	isFocusMode,
 	hasFixedToolbar,
@@ -383,7 +382,6 @@ function BlockListBlock( {
 				const wrapperClassName = classnames(
 					'wp-block editor-block-list__block block-editor-block-list__block',
 					{
-						'has-child-selected': hasChildSelected,
 						'has-warning': ! isValid || !! hasError || isUnregisteredBlock,
 						'is-selected': shouldAppearSelected,
 						'is-multi-selected': isPartOfMultiSelection,
@@ -394,6 +392,7 @@ function BlockListBlock( {
 						'is-focused':
 							isFocusMode && ( isSelected || isParentOfSelectedBlock ),
 						'is-focus-mode': isFocusMode,
+						'has-child-selected': isParentOfSelectedBlock,
 					},
 					className
 				);
@@ -596,7 +595,6 @@ const applyWithSelect = withSelect(
 		const { name, attributes, isValid } = block || {};
 
 		return {
-			hasChildSelected: hasSelectedInnerBlock( clientId ),
 			isPartOfMultiSelection:
 				isBlockMultiSelected( clientId ) || isAncestorMultiSelected( clientId ),
 			isFirstMultiSelected: isFirstMultiSelectedBlock( clientId ),
