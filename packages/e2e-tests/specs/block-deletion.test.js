@@ -9,6 +9,7 @@ import {
 	pressKeyWithModifier,
 	pressKeyTimes,
 	clickBlockToolbarButton,
+	insertBlock,
 } from '@wordpress/e2e-test-utils';
 
 const addThreeParagraphsToNewPost = async () => {
