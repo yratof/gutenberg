@@ -45,10 +45,8 @@ describe( 'Reusable Blocks', () => {
 			'//*[contains(@class, "components-notice") and contains(@class, "is-success")]/*[text()="Block created."]'
 		);
 
-		// Select all of the text in the title field by triple-clicking on it. We
-		// triple-click because, on Mac, Mod+A doesn't work. This step can be removed
-		// when https://github.com/WordPress/gutenberg/issues/7972 is fixed
-		await page.click( '.reusable-block-edit-panel__title', { clickCount: 3 } );
+		// Select all of the text in the title field.
+		await pressKeyWithModifier( 'primary', 'a' );
 
 		// Give the reusable block a title
 		await page.keyboard.type( 'Greeting block' );
@@ -224,10 +222,8 @@ describe( 'Reusable Blocks', () => {
 			'//*[contains(@class, "components-notice") and contains(@class, "is-success")]/*[text()="Block created."]'
 		);
 
-		// Select all of the text in the title field by triple-clicking on it. We
-		// triple-click because, on Mac, Mod+A doesn't work. This step can be removed
-		// when https://github.com/WordPress/gutenberg/issues/7972 is fixed
-		await page.click( '.reusable-block-edit-panel__title', { clickCount: 3 } );
+		// Select all of the text in the title field.
+		await pressKeyWithModifier( 'primary', 'a' );
 
 		// Give the reusable block a title
 		await page.keyboard.type( 'Multi-selection reusable block' );
