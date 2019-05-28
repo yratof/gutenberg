@@ -193,34 +193,21 @@ class BlockList extends Component {
 			blockClientIds,
 			rootClientId,
 			isDraggable,
-			selectedBlockClientId,
-			selectedBlockRootClientId,
-			multiSelectedBlockClientIds,
-			hasMultiSelection,
 			renderAppender,
 		} = this.props;
 
 		return (
 			<div className="editor-block-list__layout block-editor-block-list__layout">
 				{ map( blockClientIds, ( clientId ) => {
-					const isBlockInSelection = hasMultiSelection ?
-						multiSelectedBlockClientIds.includes( clientId ) :
-						[ selectedBlockRootClientId, selectedBlockClientId ].includes( clientId );
-
 					return (
-						<AsyncModeProvider
+						<BlockListBlock
 							key={ 'block-' + clientId }
-							value={ ! isBlockInSelection }
-						>
-							<BlockListBlock
-								className={ isBlockInSelection ? 'is-sync' : 'is-async' }
-								clientId={ clientId }
-								blockRef={ this.setBlockRef }
-								onSelectionStart={ this.onSelectionStart }
-								rootClientId={ rootClientId }
-								isDraggable={ isDraggable }
-							/>
-						</AsyncModeProvider>
+							clientId={ clientId }
+							blockRef={ this.setBlockRef }
+							onSelectionStart={ this.onSelectionStart }
+							rootClientId={ rootClientId }
+							isDraggable={ isDraggable }
+						/>
 					);
 				} ) }
 
@@ -241,18 +228,13 @@ export default compose( [
 	withSelect( ( select, ownProps ) => {
 		const {
 			getBlockOrder,
-			getBlockHierarchyRootClientId,
 			isSelectionEnabled,
 			isMultiSelecting,
 			getMultiSelectedBlocksStartClientId,
 			getMultiSelectedBlocksEndClientId,
-			getSelectedBlockClientId,
-			getMultiSelectedBlockClientIds,
-			hasMultiSelection,
 		} = select( 'core/block-editor' );
 
 		const { rootClientId } = ownProps;
-		const selectedBlockClientId = getSelectedBlockClientId();
 
 		return {
 			blockClientIds: getBlockOrder( rootClientId ),
@@ -260,10 +242,6 @@ export default compose( [
 			selectionEnd: getMultiSelectedBlocksEndClientId(),
 			isSelectionEnabled: isSelectionEnabled(),
 			isMultiSelecting: isMultiSelecting(),
-			selectedBlockClientId,
-			selectedBlockRootClientId: getBlockHierarchyRootClientId( selectedBlockClientId ),
-			multiSelectedBlockClientIds: getMultiSelectedBlockClientIds(),
-			hasMultiSelection: hasMultiSelection(),
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
